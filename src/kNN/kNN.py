@@ -37,4 +37,34 @@ def classify0(inX, dataSet, labels, k):
     sortedClassCount = sorted(classCount.iteritems(), key = operator.itemgetter(1), reverse = True)
     
     return sortedClassCount[0][0]
+
     
+def file2matrix(filename):
+    love_dictionary = {'largeDoses':3, 'smallDoses':2, 'didntLike':1}
+    fr = open(filename)
+    arrayOLines = fr.readlines()  #readlines()自动将文件内容分析成一个行的列表
+    numberOfLines = len(arrayOLines)
+    returnMat = zeros((numberOfLines, 3))
+    classLabelVector = []
+    index = 0
+    
+    #strip()函数原型
+    #声明：s为字符串，rm为要删除的字符序列
+    #s.strip(rm)        删除s字符串中开头、结尾处，位于 rm删除序列的字符
+    #s.lstrip(rm)       删除s字符串中开头处，位于 rm删除序列的字符
+    #s.rstrip(rm)      删除s字符串中结尾处，位于 rm删除序列的字符
+    #注意：
+    #1. 当rm为空时，默认删除空白符(包括'\n', '\r',  '\t',  ' ')
+    #2. 这里的rm删除序列是只要边（开头或结尾）上的字符在删除序列内，就删除掉。
+    
+    for line in arrayOLines:
+        line = line.strip()
+        listFromLine = line.split('\t')
+        returnMat[index,:] = listFromLine[0:3]
+        if (listFromLine[-1].isdigit()):
+            classLabelVector.append(int(listFromLine[-1]))
+        else:
+            classLabelVector.append(love_dictionary.get(listFromLine[-1]))
+        index += 1
+        
+    return returnMat, classLabelVector
